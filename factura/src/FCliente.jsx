@@ -1,5 +1,52 @@
+import React , { forwardRef, useImperativeHandle } from 'react';
 
-export function Cliente(){
+const Cliente = forwardRef((props,ref) => {
+
+    /*const { DOCUMENTO , CLIENTE , DIRECCION } = props;*/
+    
+    const DOCUMENTO='205366781652';
+    const CLIENTE='INVERCIONES MI FACTURA PERUONES MI FACTURA';  
+    const DIRECCION='Direccion Sucursal: AV. REPÚBLICA DEDireccion Sucursal'
+
+    useImperativeHandle(ref, () => ({
+        getHtmlContent: () => {
+          return `
+            <div>
+              <h2>Información del Cliente</h2>
+              <p><strong>Documento:</strong> ${Cliente.DOCUMENTO}</p>
+              <p><strong>Cliente:</strong> ${Cliente.CLIENTE}</p>
+              <p><strong>Dirección:</strong> ${Cliente.DIRECCION}</p>
+            </div>
+          `;
+        }
+    }));
+
+
+    return (
+        <div>
+            <h2>Información del Cliente</h2>
+            <p>Documento:{Cliente.DOCUMENTO}</p>
+            <p>Cliente: {Cliente.CLIENTE}</p>
+            <p>Dirección: {Cliente.DIRECCION}</p>
+        </div>
+
+
+    );
+});
+
+export default Cliente;
+
+
+
+
+
+
+
+
+
+
+
+/*export function Cliente(){
     const clientDATA = {
         DOCUMENTO:'205366781652',
         CLIENTE:'INVERCIONES MI FACTURA PERUONES MI FACTURA',
@@ -21,4 +68,4 @@ export function Cliente(){
 
 }
 
-export default Cliente
+export default Cliente*/

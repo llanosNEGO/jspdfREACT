@@ -1,13 +1,65 @@
 import { jsPDF } from "jspdf";
-import './App.css'
-import React from "react";
-import ReactDOM from 'react-dom/client'
+import React, { useRef } from 'react';
+import {createRoot} from 'react-dom/client'
 import FCliente from './FCliente'
+import './App.css'
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
+const root = createRoot(document.getElementById('root'))
 
-function App(){         
+function App () {
+
+    const pdfRef = useRef(null);
+    
+    const generarPDF =() => {
+    
+        const doc = new jsPDF();
         
+        /*const datosCliente = {
+            DOCUMENTO:'205366781652',
+            CLIENTE:'INVERCIONES MI FACTURA PERUONES MI FACTURA',
+            DIRECCION:'Direccion Sucursal: AV. REPÚBLICA DEDireccion Sucursal',
+        }*/
+    
+        const content = pdfRef.current.getHtmlContent();
+        if (!content) {
+            alert('Error: No se pudo obtener el contenido para generar el PDF.');
+            return;
+        }
+    
+        doc.html(content, {
+             
+            callback: function (doc) {
+                doc.save('Facturacliente2.pdf');
+            },
+            x:10,
+            y:10,
+    
+        });    
+    
+    };
+
+    return (
+        <div>
+            <h1>Generador de PDF</h1>
+            <FCliente ref={pdfRef} />
+            <button onClick={generarPDF}>Generar PDF</button>
+        </div>
+    );
+    
+    
+    
+   
+}
+root.render(<App />); 
+
+export default App;
+
+
+
+
+/*function App(){         
+    
+    
     const detailsData = {
         RUC: '20999999999' ,
         FACTURA : 'FACTURA ELECTRONICA',
@@ -58,7 +110,7 @@ export default App
 root.render(
     <App/>
 )
-
+*/
 
        
 
