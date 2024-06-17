@@ -1,25 +1,30 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 
+ 
+
+
 const Cliente = forwardRef((props, ref) => {
+    const {DOCUMENTO,CLIENTE,DIRECCION} = props;
     useImperativeHandle(ref, () => ({
-        getHtmlContent: () => {
-            return `
+        getHtmlContent: () => {            
+            return (`
                 <div>
                     <h2>Información del Cliente</h2>
-                    <p><strong>Documento:</strong> ${props.DOCUMENTO}</p>
-                    <p><strong>Cliente:</strong> ${props.CLIENTE}</p>
-                    <p><strong>Dirección:</strong> ${props.DIRECCION}</p>
-                </div>
-            `;
+                    <p><strong>Documento:</strong> ${DOCUMENTO}</p>
+                    <p><strong>Cliente:</strong> ${CLIENTE}</p>
+                    <p><strong>Dirección:</strong> ${DIRECCION}</p>
+                </div>`
+        
+            );               
         }
-    }));
+    }),[DOCUMENTO, CLIENTE, DIRECCION]);
 
     return (
         <div>
             <h2>Información del Cliente</h2>
-            <p>Documento: {props.DOCUMENTO}</p>
-            <p>Cliente: {props.CLIENTE}</p>
-            <p>Dirección: {props.DIRECCION}</p>
+            <p>Documento: {DOCUMENTO}</p>
+            <p>Cliente: {CLIENTE}</p>
+            <p>Dirección: {DIRECCION}</p>
         </div>
     );
 });

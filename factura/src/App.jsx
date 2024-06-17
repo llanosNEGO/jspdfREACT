@@ -1,54 +1,44 @@
-import { jsPDF } from "jspdf";
+import { jsPDF } from 'jspdf';
 import React, { useRef } from 'react';
-import {createRoot} from 'react-dom/client'
-import Cliente from './FCliente'
-import './App.css'
+import Cliente from './FCliente';
+import './App.css';
 
-const root = createRoot(document.getElementById('root'))
+function App() {
+    const pdfRef = useRef();
 
-function App () {
-
-    const pdfRef = useRef(null);
-    
-    const generarPDF =() => {
-    
+    const generarPDF = async () => {
         const doc = new jsPDF();       
-       
-        const content = pdfRef.current.getHtmlContent();
+
+        // Obtener el contenido HTML del componente hijo mediante la referencia
+        const content = await pdfRef.current.getHtmlContent();
         if (!content) {
             alert('Error: No se pudo obtener el contenido para generar el PDF.');
             return;
         }
-    
+
+        // Generar el PDF con el contenido HTML obtenido del hijo
         doc.html(content, {
-             
-            callback: function (doc) {
-                doc.save('Facturacliente2.pdf');
+            callback: () => {
+                doc.save('Facturacliente.pdf');
             },
-            x:10,
-            y:10,
-    
+            x: 15,
+            y: 20,
         });    
-    
     };
 
     return (
         <div>
             <h1>Generador de PDF</h1>
+            {/* Pasar las propiedades necesarias al componente hijo */}
             <Cliente 
                 ref={pdfRef}
-                DOCUMENTO='205366781652'
-                CLIENTE='INVERSIONES MI FACTURA PERUONES MI FACTURA'
-                DIRECCION='Dirección Sucursal: AV. REPÚBLICA DEDireccion Sucursal'        
+                DOCUMENTO="205366781652"
+                CLIENTE="INVERSIONES MI FACTURA PERUONES MI FACTURA"
+                DIRECCION="AV. REPÚBLICA DEDireccion Sucursal"
             />
             <button onClick={generarPDF}>Generar PDF</button>
         </div>
-    );
-    
-    
-    
-   
+    );  
 }
-root.render(<App />); 
 
 export default App;
