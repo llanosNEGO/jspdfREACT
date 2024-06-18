@@ -1,6 +1,8 @@
 
 import React from 'react';
-import PdfCotizacion from './FCliente';
+import PdfCotizacion from './Cotizacion';
+import PdfFactura from './Factura';
+import PdfGuia from './Guia';
 import './App.css';
 
 // App.js
@@ -8,7 +10,15 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <h1>Generar PDF Cotizacion</h1>
+      <h1>Generar PDF Comprobantes</h1>
+      <PdfGuia/>
+      <p>
+
+      </p>
+      <PdfFactura/>
+      <p>
+
+      </p>
       <PdfCotizacion />
     </div>
   );

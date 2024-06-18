@@ -23,7 +23,7 @@ const PdfCotizacion = () => {
     doc.setFont("helvetica", "bold");
     doc.text('COCA-COLA SERVICIOS DE PERU S.A', 50, 10, { maxWidth: limiteyemp });    
     doc.setFontSize(8);
-    doc.text('Direccion Sucursal: AV. REPÚBLICA DE PANAMÁ URB. LIMATAMBO 4050', 50, 15,{ maxWidth: limiteyemp });    
+    doc.text('Direccion : AV. REPÚBLICA DE PANAMÁ URB. LIMATAMBO 4050', 50, 15,{ maxWidth: limiteyemp });    
     doc.text('Teléfonos: 854966666 | 6558842814', 50, 22,{ maxWidth: limiteyemp } );
     doc.text('Correo: Venta@mifacturaperu.com.', 50, 26,{ maxWidth: limiteyemp } );
 
@@ -175,6 +175,7 @@ const PdfCotizacion = () => {
     doc.text('GRAVADO :   S/ 197.46',167,240);
     doc.text('IGV :  S/                35.54',167,244);
     doc.text('TOTAL : S/         233.00',167,248);
+
     
     
     doc.save('Diseño_Cotizacion.pdf');
@@ -182,7 +183,7 @@ const PdfCotizacion = () => {
 
   return (
     <div>
-      <button onClick={generatePDF}>Generar PDF</button>
+      <button onClick={generatePDF}>Generar Cotizacion PDF</button>
     </div>
   );
 };
