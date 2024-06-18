@@ -8,7 +8,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <h1>Generate PDF Example</h1>
+      <h1>Generar PDF Cotizacion</h1>
       <PdfGenerator />
     </div>
   );
