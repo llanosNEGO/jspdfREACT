@@ -67,7 +67,7 @@ export class Section {
             // Activar estilos
             const {size, type, lineHeightFactor, align, heightCorrection} = style;
             this.doc.setFontSize(size);
-            this.doc.setFontType(type);
+            //this.doc.setFontType(type);
             this.doc.setLineHeightFactor(lineHeightFactor);
 
             // Corregir altura de texto en la primera escritura del texto
