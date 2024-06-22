@@ -1,6 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { Style, Section } from "./ClasesImpresion";
-import 'jspdf-autotable'
+import 'jspdf-autotable';
+import {decimalAdjust, doDownload, VALE} from "./Global";
 // import { decimalAdjust, calculateVueltoToDisplay } from './../Global';
 // import moment from "moment";
 
@@ -31,9 +32,9 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     const EmpresaTittleSection = new Section(
         doc,
         40, //x
-        10, //y
+        8, //y
         EmpresaTittleStyle,
-          //limit
+        100//limit
     );
     doc.setFont("helvetica", "bold");    
     EmpresaTittleSection.write(Venta.Empresa.toUpperCase(), EmpresaTittleStyle);
@@ -42,7 +43,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     //linea separacion 1
     const lineaIniX = 0; 
     const lineaFinX = 600; 
-    const lineaY = 35;  
+    const lineaY = 36;  
     doc.line(lineaIniX, lineaY, lineaFinX, lineaY);    
 
     ////////////////Datos de la empresa 
@@ -56,9 +57,9 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     );
 
     EmpresaDataSection.write(Venta.Direccion.toUpperCase());
-    EmpresaDataSection.write(Venta.Sucursal.toUpperCase());
+    
     if (Venta.DireccionSucursal) {
-        EmpresaDataSection.write("Direccion Sucursal: " + Venta.DireccionSucursal);
+        EmpresaDataSection.write("Sucursal " +Venta.Sucursal + ": " +Venta.DireccionSucursal);
     }
     if (Venta.TelefonoDos != 0 && Venta.TelefonoTres != 0) {
         EmpresaDataSection.write("Teléfonos: " + Venta.TelefonoDos + " | " + Venta.TelefonoTres);
@@ -67,13 +68,15 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     } else if (Venta.TelefonoDos == 0 && Venta.TelefonoTres != 0) {
         EmpresaDataSection.write("Teléfono: " + Venta.TelefonoTres);
     }
+    EmpresaDataSection.write("Correo: " +Venta.Correo.toUpperCase());
+
 //////////////Factura
     const ComprobanteStyle = new Style(10, "bold", 1.5, 'center');
     const ComprobanteStyleRUC = new Style(14, "bold", 1.2, 'center');//estiloRuc
     const ComprobanteSection = new Section(
         doc,
         143,//x
-        12,//y
+        8,//y
         ComprobanteStyle,
         60,//largo
         null,//noc
@@ -103,16 +106,21 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     const clienteSection = new Section(
         doc,
         10,//x
-        EmpresaDataSection.endY + 6, //y
+        EmpresaDataSection.endY + 4, //y
         clienteStyle,
         127,//limit
         null,//noc
-        3//ancho
+        4//ancho
     );
 
-    clienteSection.write("CLIENTE                     : "+Venta.RazonSocial.toUpperCase(), clienteStyle);    
-    clienteSection.write(`DOC. IDENTIDAD       : ${Venta.NroTipoDocumento}`);
-    if (Venta.Celular) {
+    clienteSection.write("CLIENTE                     : "+Venta.RazonSocial.toUpperCase(), clienteStyle);  
+    if(Venta.IdtipoDocumentoCliente == 6){        
+        clienteSection.write(`RUC                              : ${Venta.NroTipoDocumento}`);
+    }  
+    if(Venta.IdtipoDocumentoCliente == 1){
+        clienteSection.write(`DNI                              : ${Venta.NroTipoDocumento}`);
+    }
+    if (Venta.Celular){
         clienteSection.write(`N° CELULAR               : ${Venta.Celular}`);
     }
     if (Venta.ClienteDireccion) {
@@ -136,7 +144,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     const fechaSection = new Section(
         doc,
         173,//x
-        EmpresaDataSection.endY + 5,//y
+        EmpresaDataSection.endY + 4,//y
         fechaStyle,
         null,        
     );
@@ -152,7 +160,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     const pagoSection = new Section(
         doc,
         143,//x
-        EmpresaDataSection.endY + 10,//y
+        EmpresaDataSection.endY + 9,//y
         pagoStyle,
         60,//ancho
         null,
@@ -168,7 +176,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     //linea separacion 2
     const lineaIniX2 = 0; 
     const lineaFinX2 = 600; 
-    const lineaY2 = 62;  
+    const lineaY2 = 64;  
     doc.line(lineaIniX2, lineaY2, lineaFinX2, lineaY2);   
 
     //TABLA
@@ -211,9 +219,273 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
         theme: "plain"
     });
 
-    // Ajustes finales...
+    //Informacion pie de pagina 
 
-    doc.save(`${Venta.NumeroComprobante}.pdf`);
+    const pieStyle1 = new Style ( 6 , "normal"  );
+    const pieStyle2 = new Style ( 6 , "normal"  );
+    const pieSection = new Section (
+        doc,
+        10,
+        293
+    )
+    const pieSection2 = new Section (
+        doc,
+        154,
+        293
+    )
+    pieSection.write(Venta.Consultadocumento.toUpperCase(),pieStyle1);
+    pieSection2.write(Venta.Representacion.toUpperCase(),pieStyle2);
+
+    /// Numeros de cuentas 
+
+    const numcuenStyle = new Style (6 , "normal" );
+    const cuentStyle = new Style(10,"normal");
+    const CuentasSection = new Section(
+        doc,
+        105,//x     
+        270,//y
+        cuentStyle,
+        100,
+        null,
+        3
+             
+    )
+    
+    let cuentasBancariasEmpresa = "";
+    if(cuentasBancarias.length){
+        cuentasBancariasEmpresa = cuentasBancarias.map(x => `${x.Banco} ${x.Moneda} NRO.CTA: ${x.NumeroCTA} CCI: ${x.CCI}`)        
+    }   
+    doc.setFont("helvetica", "bold");
+    CuentasSection.write(Venta.Cuentas.toUpperCase(),cuentStyle);
+    doc.setFont("helvetica", "normal");
+    CuentasSection.write(cuentasBancariasEmpresa,numcuenStyle);
+
+    CuentasSection.drawBox(3);
+
+    
+    // // Seccion de QR DATA
+
+    // doc.setFontSize(6);
+    // doc.text('DATA',17,292);
+
+    // const Xqr = 10; 
+    // const Yqr = 270;  
+    // const rectWidthqr = 25;
+    // const rectHeightqr = 18; 
+    // doc.rect(Xqr, Yqr, rectWidthqr, rectHeightqr);
+
+    // doc.text('IMAGEN QR',17,280);
+
+    // // Seccion de QR XML
+
+    // doc.setFontSize(6);
+    // doc.text('XML',52,292);
+
+    // const Xxml = 42; 
+    // const Yxml = 270;  
+    // const rectWidthxml = 25;
+    // const rectHeightxml = 18; 
+    // doc.rect(Xxml, Yxml, rectWidthxml, rectHeightxml);
+
+    // doc.text('IMAGEN QR',48,280);
+
+
+    // // Seccion de QR CDR
+
+    // doc.setFontSize(6);
+    // doc.text('CDR',84,292);
+
+    // const Xcd = 74; 
+    // const Ycd = 270;  
+    // const rectWidthcd = 25;
+    // const rectHeightcd = 18; 
+    // doc.rect(Xcd, Ycd, rectWidthcd, rectHeightcd);
+
+    // doc.text('IMAGEN QR',80,280);
+    
+    
+    // Tercera Linea de separacion 
+
+    const lineainitX3 = 0; 
+    const lineaFinX3 = 600; 
+    const lineaY3 = 268;   
+    doc.line(lineainitX3, lineaY3, lineaFinX3, lineaY3); 
+
+    ///OBSERVACIONES
+    const ObservacionesStyle = new Style(10, "normal");
+    const ObservacionesSection = new Section(
+        doc,
+        10,
+        248,
+        ObservacionesStyle,
+        195,
+        null,
+        8
+    ); //(doc, 10, 0, ObservacionesStyle, 70)
+
+    Venta.Observacion = (Venta.Observacion ? Venta.Observacion : "") + (hasRetencion ? `-RETENCIÓN EN CUOTAS DEL ${Venta.retencion} %` : "")
+    const tmpObs = Venta.Observacion
+
+    let observaciones;
+    if (Venta.Observacion && Venta.Observacion.length) {
+        observaciones = ` ${tmpObs}`;        
+    }
+    doc.setFont("helvetica", "bold");
+    ObservacionesSection.write(observaciones,ObservacionesStyle);
+    doc.setFont("helvetica", "normal"); 
+    
+    ObservacionesSection.drawBox(3);
+
+    //////DESCRIPCION
+    const LetrasStyle = new Style(8, "normal");
+    const LetrasSection = new Section(
+        doc,  
+        10,//x
+        244,//y      
+        LetrasStyle
+        
+    ); //(doc, 10, 0, LetrasStyle, 70))
+    
+    let letras;
+    
+    if (Venta.Letras) {
+        letras = `SON: ${Venta.Letras}` //salto de linea jspdf text
+        if (Venta.IdModalidadPago === "CRÉDITO") {
+            letras = letras + `\nCANTIDAD DE DÍAS: ${Venta.CantidadDiasCredito}\nFECHA DE PAGO: ${Venta.FechaPago}`
+        }
+        if (Venta.PlazoEntrega) {
+            letras = letras + `\nPLAZO ENTREGA: ${moment(Venta.PlazoEntrega).format("DD-MM-YYYY")}`
+        }
+        
+    }
+    LetrasSection.write(letras,LetrasStyle);
+
+    /////////////////////////////////MONTOSSS 
+
+    const totalesStyle = new Style(10, "bold", 1.15, 'right');
+    const totalesTittleSection = new Section(doc,
+        150, 
+        // pageHeight - (imgQR.height / 3.779528 + 13), 
+        235,
+        totalesStyle,
+        40
+    ); //(doc, 130, 0, totalesStyle, 40)
+
+    let totalesTitle = ["TOTAL:  " + `${Venta.Simbolo}`];
+
+    if (Venta.Redondeo > 0 && showExtraInfo) totalesTitle.push("REDONDEO:  " + `${Venta.Simbolo}`)
+    if (Venta.DescuentoTotal > 0) totalesTitle.push("DESCUENTO:  " + `${Venta.Simbolo}`)
+    if (Venta.Vuelto > 0) totalesTitle.push("VUELTO:  " + `${Venta.Simbolo}`)
+    if (showExtraInfo) totalesTitle.push("T.PAGAR:  " + `${Venta.Simbolo}`)
+    if (hasRetencion) totalesTitle.push("IMP. NETO: " + `${Venta.Simbolo}`)
+
+
+    // if (Venta.IdTipoDocumentoSunat !== VALE) {
+    const ImpuestosTitle = [];
+
+    if (Venta.descItems > 0) ImpuestosTitle.push("TOTAL DESC.:  " + `${Venta.Simbolo}`)
+    if (Venta.Gravadas > 0) ImpuestosTitle.push("GRAVADO:  " + `${Venta.Simbolo}`)
+    if (Venta.Exoneradas > 0) ImpuestosTitle.push("EXONERADO:  " + `${Venta.Simbolo}`)
+    if (Venta.Inafectas > 0) ImpuestosTitle.push("INAFECTO:  " + `${Venta.Simbolo}`)
+    if (Venta.Gratuitas > 0) ImpuestosTitle.push("GRATUITO:  " + `${Venta.Simbolo}`)
+    if (Venta.IGV > 0) ImpuestosTitle.push("IGV:  " + `${Venta.Simbolo}`)
+    if (Venta.ICBPER > 0) ImpuestosTitle.push("ICBPER:  " + `${Venta.Simbolo}`)
+    if (Venta.ISC > 0) ImpuestosTitle.push("ISC:  " + `${Venta.Simbolo}`)
+    if (Venta.IVAP > 0) ImpuestosTitle.push("IVAP:  " + `${Venta.Simbolo}`)
+
+    totalesTitle = [...ImpuestosTitle, ...totalesTitle];
+    // }
+
+    // const totalesTitleSectionHeight =
+    //     totalesTittleSection.getHeight(totalesTitle) + 17;
+    // totalesTittleSection.y = pageHeight - totalesTitleSectionHeight;
+    doc.setFont("helvetica", "bold");
+    totalesTittleSection.write(totalesTitle,totalesStyle);
+    doc.setFont("helvetica", "normal");
+    const gravadas = Venta.Gravadas.toFixed(2);
+    const exoneradas = String(decimalAdjust('floor', Venta.Exoneradas, -2));
+    const inafectas = String(decimalAdjust('floor', Venta.Inafectas, -2));
+    const gratuitas = String(decimalAdjust('floor', Venta.Gratuitas, -2));
+    let igv = Venta.IGV.toFixed(2);
+    let icbper = String(decimalAdjust('floor', Venta.ICBPER, -2));
+    let isc = String(decimalAdjust('floor', Venta.ISC, -2));
+    let ivap = String(decimalAdjust('floor', Venta.IVAP, -2));
+    let total = String(Number(decimalAdjust('round', Venta.Total, -2)).toFixed(2));
+    let Redondeo = String(decimalAdjust('floor', Venta.Redondeo, -2));
+    let TotalRedondeo = String(decimalAdjust('floor', Venta.TotalRedondeo, -2));
+    let descItems = String(decimalAdjust('floor', Venta.descItems, -2))
+    const _impNeto = Venta.Total - (Venta.Total * (Venta.retencion / 100))
+    const importeNeto = String(decimalAdjust('floor', _impNeto, -2))
+
+    // const vuelto = calculateVueltoToDisplay(Venta);
+
+    let descuento = String(Venta.DescuentoTotal);
+
+    const totalesMontoSection = new Section(doc, 
+    165,
+    // pageHeight - (imgQR.height / 3.779528 + 13),
+    235,
+    totalesStyle,
+    40
+    ); //(doc, 160, 0, totalesStyle, 40)
+
+    let totales = [
+        `${total}`
+    ];
+
+    if (Venta.Redondeo > 0 && showExtraInfo) totales.push(Redondeo)
+    if (Venta.DescuentoTotal > 0) totales.push(descuento)
+    // if (Venta.Vuelto > 0) totales.push(vuelto)
+    if (showExtraInfo) totales.push(TotalRedondeo)
+    if (hasRetencion > 0) totales.push(importeNeto)
+
+    // if (Venta.IdTipoDocumentoSunat !== VALE) {
+    let Impuestos = [];
+
+    if (Venta.descItems > 0) Impuestos.push(descItems)
+    if (Venta.Gravadas > 0) Impuestos.push(gravadas)
+    if (Venta.Exoneradas > 0) Impuestos.push(exoneradas)
+    if (Venta.Inafectas > 0) Impuestos.push(inafectas)
+    if (Venta.Gratuitas > 0) Impuestos.push(gratuitas)
+    if (Venta.IGV > 0) Impuestos.push(igv)
+    if (Venta.ICBPER > 0) Impuestos.push(icbper)
+    if (Venta.ISC > 0) Impuestos.push(isc)
+    if (Venta.IVAP > 0) Impuestos.push(ivap)
+
+
+    totales = [...Impuestos, ...totales];
+    // }
+
+    // const totalesMontoHeight = totalesMontoSection.getHeight(totales) + 17;
+    // totalesMontoSection.y = pageHeight - totalesMontoHeight;
+    // const heightForNonQr = Venta.IdTipoDocumentoSunat === VALE ? 10 : 0
+    doc.setFont("helvetica", "bold");
+    totalesMontoSection.write(totales,totalesStyle);
+    doc.setFont("helvetica", "normal");
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+    doc.save(`Nuevo_Diseño_Factura
+        .pdf`);
 }
 
 export default crearDocPDF;
