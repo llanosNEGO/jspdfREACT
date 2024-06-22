@@ -128,8 +128,9 @@ function App() {
         "NroTipoDocumento": "20539952413",
         "RazonSocial": "ESCOBEDO MEDINA AUDITORES ASOCIADOS S.CIVIL DE R.L.",
         "ClienteDireccion": "CAL. ARGENTINA URB. EL RECREO ET. 2 131",
-        "TipoComprobante": "Factura Electronica",
+        "TipoComprobante": "BOLETA DE VENTA ELECTRONICA",
         "Serie": "FE01",
+        "Correo": "Venta@mifacturaperu.com",
         "NumeroComprobante": "0000020",
         "IdProceso": "662",
         "Proceso": "Preventas",
@@ -156,7 +157,7 @@ function App() {
         "Sucursal": "LIMA",
         "DireccionSucursal": "AV. REPÚBLICA DE PANAMÁ URB. LIMATAMBO 4050",
         "Empresa": "COCA-COLA SERVICIOS DE PERU S.A",
-        "Direccion": "AV. REPÚBLICA DE PANAMÁ URB. LIMATAMBO 4050",
+        "Direccion": "AV. REPÚBLICA DE PANAMÁ URB. LIMATAMBO 4050  CAJAMARCA - CAJAMARCA - CAJAMARCA",
         "Ruc": "20415932376",
         "Logo": null,
         "TelefonoDos": "854966666",
@@ -164,9 +165,10 @@ function App() {
         "IdModalidadPago": "CONTADO",
         "CantidadDiasCredito": "-",
         "FechaPago": "-",
-        "Observacion": "",
+        "Observacion": "OBSERVACIONES:",
         "CodigoTipoComprobante": 1,
         "IdTipoDocumentoSunat": 2,
+        "IdtipoDocumentoCliente":1,
         "Alias": "",
         "NombreEmpleado": "DENIS",
         "ApellidoEmpleado": "SANCHEZ",
@@ -179,10 +181,15 @@ function App() {
         "retencion": 0,
         "IdGuiaRemision": null,
         "OrdenCompra": "",
-        "descItems": 0
+        "descItems": 0,
+        "Consultadocumento":"PARA CONSULTAR EL DOCUMENTO VISITA WWW.MIFACTURAPERU.COM   CERTIFICADO PSE POR SUNAT",
+        "Representacion":"Representacion impresa del comprobante",  
+        "Cuentas":"NUMEROS DE CUENTA",    
+
       };   
     const cuentasBancarias = [
       {
+        
         "IdNumerosCuenta": 1,
         "IdEmpresa": 2,
         "IdMoneda": 1,
@@ -192,6 +199,7 @@ function App() {
         "Moneda": "SOLES"
       },
       {
+        
         "IdNumerosCuenta": 2,
         "IdEmpresa": 2,
         "IdMoneda": 2,
@@ -201,6 +209,7 @@ function App() {
         "Moneda": "DÓLARES AMERICANOS"
       },
       {
+        
         "IdNumerosCuenta": 3,
         "IdEmpresa": 2,
         "IdMoneda": 1,
@@ -210,6 +219,7 @@ function App() {
         "Moneda": "SOLES"
       },
       {
+        
         "IdNumerosCuenta": 4,
         "IdEmpresa": 2,
         "IdMoneda": 2,
@@ -241,21 +251,21 @@ export default App;
 
 // App.js
 
-/*function App() {
-  return (
-    <div className="App">
-      <h1>Generar PDF Comprobantes</h1>
-      <PdfGuia/>
-      <p>
+// function App() {
+//   return (
+//     <div className="App">
+//       <h1>Generar PDF Comprobantes</h1>
+//       <PdfGuia/>
+//       <p>
 
-      </p>
-      <PdfFactura/>
-      <p>
+//       </p>
+//       <PdfFactura/>
+//       <p>
 
-      </p>
-      <PdfCotizacion />      
-    </div>
-  );
-}
+//       </p>
+//       <PdfCotizacion />      
+//     </div>
+//   );
+// }
 
-export default App;*/
+// export default App;

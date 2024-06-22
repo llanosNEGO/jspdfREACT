@@ -116,7 +116,7 @@
       "NroTipoDocumento": "20539952413",
       "RazonSocial": "ESCOBEDO MEDINA AUDITORES ASOCIADOS S.CIVIL DE R.L.",
       "ClienteDireccion": "CAL. ARGENTINA URB. EL RECREO ET. 2 131",
-      "TipoComprobante": "Factura Electronica",
+      "TipoComprobante": "BOLETA DE VENTA ELECTRONICA",
       "Serie": "FE01",
       "NumeroComprobante": "0000020",
       "IdProceso": "662",
@@ -167,7 +167,7 @@
       "retencion": 0,
       "IdGuiaRemision": null,
       "OrdenCompra": "",
-      "descItems": 0
+      "descItems": 10
     },
     "extImg": "png",
     "cuentasBancarias": [

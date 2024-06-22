@@ -290,6 +290,8 @@ export async function crearDocPDF(DetallesVenta, Venta, extImg = 'png', cuentasB
 
     if (pageHeight - finalTable <= 40)
         doc.addPage()
+
+    
     const totalesStyle = new Style(10, "bold", 1.15, 'right');
     const totalesTittleSection = new Section(doc, 130, pageHeight - (imgQR.height / 3.779528 + 13), totalesStyle, 40); //(doc, 130, 0, totalesStyle, 40)
 
@@ -374,6 +376,7 @@ export async function crearDocPDF(DetallesVenta, Venta, extImg = 'png', cuentasB
     totalesMontoSection.y = pageHeight - totalesMontoHeight;
     const heightForNonQr = Venta.IdTipoDocumentoSunat === VALE ? 10 : 0
 
+    //////CUENTAS BANCARIAS 
     const CuentasStyle = new Style(8, "bold");
     const CuentasSection = new Section(doc, (imgQR.width / 3.779528 + 13) - 47, pageHeight- (imgQR.height / 3.779528 + 13)  + heightForNonQr , CuentasStyle, 150); //(doc, 10, 0, ObservacionesStyle, 70)
     let CuentasSectionHeight;
@@ -385,8 +388,13 @@ export async function crearDocPDF(DetallesVenta, Venta, extImg = 'png', cuentasB
         CuentasSection.y = pageHeight - CuentasSectionHeight - 40;
     }
 
+    /////////////////////////
+
     const ObservacionesStyle = new Style(9, "normal");
-    const ObservacionesSection = new Section(doc, (imgQR.width / 3.779528 + 13) - 10, pageHeight - (imgQR.height / 3.779528 + 13) + heightForNonQr, ObservacionesStyle, 82); //(doc, 10, 0, ObservacionesStyle, 70)
+    const ObservacionesSection = new Section(doc,
+         (imgQR.width / 3.779528 + 13) - 10, pageHeight - (imgQR.height / 3.779528 + 13) + heightForNonQr,
+          ObservacionesStyle, 
+          82); //(doc, 10, 0, ObservacionesStyle, 70)
 
     Venta.Observacion = (Venta.Observacion ? Venta.Observacion : "") + (hasRetencion ? `-RETENCIÓN EN CUOTAS DEL ${Venta.retencion} %` : "")
     const tmpObs = Venta.Observacion
@@ -400,7 +408,7 @@ export async function crearDocPDF(DetallesVenta, Venta, extImg = 'png', cuentasB
         ObservacionesSection.y = pageHeight - observacionesSectionHeight - 30;
     }
 
-
+    //////DEScRIPCION
     const LetrasStyle = new Style(9, "bold");
     const LetrasSection = new Section(doc, (imgQR.width / 3.779528 + 13) - 10, ObservacionesSection.getHeight(observaciones) + ObservacionesSection.y + 3.5, LetrasStyle, 82); //(doc, 10, 0, LetrasStyle, 70))
     let LetrasSectionHeight;
