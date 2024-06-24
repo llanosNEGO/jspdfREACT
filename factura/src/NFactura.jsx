@@ -31,7 +31,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     const EmpresaTittleStyle = new Style(12, "bold ",1.5);
     const EmpresaTittleSection = new Section(
         doc,
-        40, //x
+        44, //x
         8, //y
         EmpresaTittleStyle,
         100//limit
@@ -99,20 +99,49 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
         ComprobanteSection.write(NCComprobanteData, NCComprobanteStyle);
     }
 
-    ComprobanteSection.drawBox(3);//Borde
+    ComprobanteSection.drawBox(3);//Borde        
+
+    /////DATOS DE LA ORDEN DE COMPRA
+
+    const ordenStyle = new Style(10, "bold", 1.5);
+    const ordenSection = new Section(
+        doc,
+        10,//x
+        EmpresaDataSection.endY + 4,//y
+        ordenStyle,
+        null,        
+    );
+    doc.setFont("helvetica", "bold");
+    ordenSection.write(`NUMERO ORDEN : `+Venta.OrdenCompra.toUpperCase());
+    doc.setFont("helvetica", "normal");
+
+    /////DATOS DE LA GUIA DE REMISION 
+    
+    const guiaStyle = new Style(10, "bold", 1.5);
+    const guiaSection = new Section(
+        doc,
+        80,//x
+        EmpresaDataSection.endY + 4,//y
+        guiaStyle,
+        null,        
+    );
+    doc.setFont("helvetica", "bold");
+    guiaSection.write(`NUMERO GUIA : ${Venta.GuiaRemision}`);
+    doc.setFont("helvetica", "normal");
+    
 
     //////////////////////////////////CLIENTE
+
     const clienteStyle = new Style(8, "normal", 1.5);
     const clienteSection = new Section(
         doc,
         10,//x
-        EmpresaDataSection.endY + 4, //y
+        EmpresaDataSection.endY + 9, //y
         clienteStyle,
         127,//limit
-        null,//noc
-        4//ancho
+        null,
+        2//ancho
     );
-
     clienteSection.write("CLIENTE                     : "+Venta.RazonSocial.toUpperCase(), clienteStyle);  
     if(Venta.IdtipoDocumentoCliente == 6){        
         clienteSection.write(`RUC                              : ${Venta.NroTipoDocumento}`);
@@ -164,7 +193,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
         pagoStyle,
         60,//ancho
         null,
-        2//largo
+        4//largo
     );
 
     pagoSection.write(`TIPO MONEDA : ${Venta.Abreviatura}`, clienteStyle);
@@ -176,10 +205,10 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     //linea separacion 2
     const lineaIniX2 = 0; 
     const lineaFinX2 = 600; 
-    const lineaY2 = 64;  
+    const lineaY2 = 68;  
     doc.line(lineaIniX2, lineaY2, lineaFinX2, lineaY2);   
 
-    //TABLA
+    /////////////TABLA
 
     const startYTabla = Math.max(ComprobanteSection.endY, clienteSection.endY) + 7;
     doc.setFontSize(8);
@@ -222,16 +251,16 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     //Informacion pie de pagina 
 
     const pieStyle1 = new Style ( 6 , "normal"  );
-    const pieStyle2 = new Style ( 6 , "normal"  );
+    const pieStyle2 = new Style ( 6 , "bold"  );
     const pieSection = new Section (
         doc,
-        10,
-        293
+        10,//x
+        293//y
     )
     const pieSection2 = new Section (
         doc,
-        154,
-        293
+        153,//x
+        293//y
     )
     pieSection.write(Venta.Consultadocumento.toUpperCase(),pieStyle1);
     pieSection2.write(Venta.Representacion.toUpperCase(),pieStyle2);
@@ -245,9 +274,9 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
         105,//x     
         270,//y
         cuentStyle,
-        100,
+        100,//largo
         null,
-        3
+        3//ancho
              
     )
     
@@ -331,7 +360,8 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
         observaciones = ` ${tmpObs}`;        
     }
     doc.setFont("helvetica", "bold");
-    ObservacionesSection.write(observaciones,ObservacionesStyle);
+    doc.text("OBSERVACIONES:", ObservacionesSection.x-5, ObservacionesSection.y-5,ObservacionesStyle);//MUESTRA SOLO EL MENSAJE OBSERVACIONES EN LA UBICACION REAL
+    ObservacionesSection.write("OBSERVACIONES :"+Venta.Observacion.toUpperCase());
     doc.setFont("helvetica", "normal"); 
     
     ObservacionesSection.drawBox(3);
@@ -364,11 +394,11 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
 
     const totalesStyle = new Style(10, "bold", 1.15, 'right');
     const totalesTittleSection = new Section(doc,
-        150, 
+        150, //x
         // pageHeight - (imgQR.height / 3.779528 + 13), 
-        235,
-        totalesStyle,
-        40
+        235, //y
+        totalesStyle, //estilo
+        40//largo
     ); //(doc, 130, 0, totalesStyle, 40)
 
     let totalesTitle = ["TOTAL:  " + `${Venta.Simbolo}`];
@@ -422,11 +452,11 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     let descuento = String(Venta.DescuentoTotal);
 
     const totalesMontoSection = new Section(doc, 
-    165,
+    165, //x
     // pageHeight - (imgQR.height / 3.779528 + 13),
-    235,
+    235, //y
     totalesStyle,
-    40
+    40 //largo
     ); //(doc, 160, 0, totalesStyle, 40)
 
     let totales = [
@@ -463,29 +493,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     totalesMontoSection.write(totales,totalesStyle);
     doc.setFont("helvetica", "normal");
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-    doc.save(`Nuevo_Diseño_Factura
-        .pdf`);
+    doc.save(`Nuevo_Diseño_Factura.pdf`);
 }
 
 export default crearDocPDF;

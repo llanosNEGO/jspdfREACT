@@ -180,11 +180,12 @@ function App() {
         "metadata": "{}",
         "retencion": 0,
         "IdGuiaRemision": null,
-        "OrdenCompra": "",
+        "OrdenCompra": "OC-2024-00004",
         "descItems": 0,
         "Consultadocumento":"PARA CONSULTAR EL DOCUMENTO VISITA WWW.MIFACTURAPERU.COM   CERTIFICADO PSE POR SUNAT",
         "Representacion":"Representacion impresa del comprobante",  
         "Cuentas":"NUMEROS DE CUENTA",    
+        
 
       };   
     const cuentasBancarias = [
