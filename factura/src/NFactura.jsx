@@ -79,7 +79,7 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
         8,//y
         ComprobanteStyle,
         60,//largo
-        null,//noc
+        null,//
         2//ancho
     );
     doc.setFont("helvetica", "bold");
