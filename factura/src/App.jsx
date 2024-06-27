@@ -495,7 +495,7 @@ function App() {
         "ApellidoEmpleado":"LIMA",
         "Ubigeo":"150131",
         "Celular":"",
-        "DireccionCliente":"AV. SANTO TORIBIO - 143","TipoComprobante":"Cotización",
+        "TipoComprobante":"Cotización",
         "TelefonoDos":"854966666",
         "TelefonoTres":"6558842814",
         "NombreCaja":"",
@@ -527,7 +527,10 @@ function App() {
         "nota3":"3. Los productos serán recogidos en nuestro punto de venta Jr. Jose Sabogal N 1200 - Cajamarca",
         "DireccionCliente": "CAL. ARGENTINA URB. EL RECREO ET. 2 131",
         "infoCotizaciones":
-        ["Esta cotización es válida hasta agotar stock.","Los precios pueden cambiar sin previo aviso."],        
+        [
+          "Esta cotización es válida hasta agotar stock.",
+          "Los precios pueden cambiar sin previo aviso."
+        ],        
         "EsCotizacion":true
     };
     const cuentasBancarias =

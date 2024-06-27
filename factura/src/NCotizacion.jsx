@@ -207,10 +207,10 @@ function crearCotPDF(DetallesVenta,Venta,cuentasBancarias = [] ) {
     const pagoStyle = new Style(8, "bold", 1.5, 'center');
     const pagoSection = new Section(
         doc,
-        143,//x
+        140,//x
         EmpresadataSection.endY + 9,//y
         pagoStyle,
-        60,//ancho
+        63,//ancho
         null,
         4//largo
     );
@@ -218,7 +218,7 @@ function crearCotPDF(DetallesVenta,Venta,cuentasBancarias = [] ) {
     pagoSection.write(`TIPO MONEDA : ${Venta.Abreviatura}`, clienteStyle);
     pagoSection.write(`CONDICION DE PAGO :   ${Venta.IdModalidadPago}`, clienteStyle);
     pagoSection.write(`CANTIDAD DE DIAS :  3`,clienteStyle );
-    pagoSection.write(`CATIDAD DE CUOTAS :  3`,clienteStyle );
+    pagoSection.write(`PLAZO ENTREGA MAXIMO : ${Venta.PlazoEntrega}`,clienteStyle );
     pagoSection.drawBox(3);
 
     ///SEGUNDA LINEA DE SEPARACION
@@ -391,17 +391,162 @@ function crearCotPDF(DetallesVenta,Venta,cuentasBancarias = [] ) {
     );
     Linea3Section.drawLine(0, 0); // Dibuja la línea
 
-    const NotaStyle = new Style(8,"Bold",1.5)
+    ////NOTA DETALLE
+    const NotatitleStyle = new Style(8,"normal",1.5)
+    const NotaStyle = new Style(8,"normal")
     const NotaSection = new Section(
         doc,
         10,
         250,
-        NotaStyle     
+        NotaStyle,
+        196     
     ) 
     doc.setFont("helvetica", "bold");
-    NotaSection.write(Venta.nota.toUpperCase());
+    NotaSection.write(Venta.nota.toUpperCase(),NotatitleStyle);
     doc.setFont("helvetica", "normal");
+    NotaSection.write([
+        " "+Venta.nota1.toLowerCase(),
+        " "+Venta.nota2.toLowerCase(),
+        " "+Venta.nota3.toLowerCase()
+    ]);
 
+    /////CUARTA LINEA DE SEPARACION
+    const Linea4Style = new Style(8, "bold", 1.5);
+    const Linea4Section = new DynamicSection(
+        doc,
+        10, //x
+        249, // ajusta la posición Y según sea necesario
+        Linea4Style,
+        194 // límite del ancho de la línea
+    );
+    Linea4Section.drawLine(0, 0); // Dibuja la línea
+
+    //////DESCRIPCION MONTOS
+    const LetrasStyle = new Style(8, "normal");
+    const LetrasSection = new Section(
+        doc,  
+        10,//x
+        246,//y      
+        LetrasStyle
+        
+    ); //(doc, 10, 0, LetrasStyle, 70))
+    
+    let letras;
+    
+    if (Venta.Letras) {
+        letras = `SON: ${Venta.Letras}` //salto de linea jspdf text
+        if (Venta.IdModalidadPago === "CRÉDITO") {
+            letras = letras + `\nCANTIDAD DE DÍAS: ${Venta.CantidadDiasCredito}\nFECHA DE PAGO: ${Venta.FechaPago}`
+        }
+        // if (Venta.PlazoEntrega) {
+        //     letras = letras + `\nPLAZO ENTREGA: ${moment(Venta.PlazoEntrega).format("DD-MM-YYYY")}`
+        // }
+        
+    }
+    LetrasSection.write(letras,LetrasStyle);
+
+    /////////////////////////////////MONTOSSS 
+
+    const totalesStyle = new Style(10, "bold", 1.15, 'right');
+    const totalesTittleSection = new Section(doc,
+        150, //x
+        // pageHeight - (imgQR.height / 3.779528 + 13), 
+        235, //y
+        totalesStyle, //estilo
+        40//largo
+    ); //(doc, 130, 0, totalesStyle, 40)
+
+    let totalesTitle = ["TOTAL:  " + `${Venta.Simbolo}`];
+
+    if (Venta.Redondeo > 0 && showExtraInfo) totalesTitle.push("REDONDEO:  " + `${Venta.Simbolo}`)
+    if (Venta.DescuentoTotal > 0) totalesTitle.push("DESCUENTO:  " + `${Venta.Simbolo}`)
+    if (Venta.Vuelto > 0) totalesTitle.push("VUELTO:  " + `${Venta.Simbolo}`)
+    if (showExtraInfo) totalesTitle.push("T.PAGAR:  " + `${Venta.Simbolo}`)
+    if (hasRetencion) totalesTitle.push("IMP. NETO: " + `${Venta.Simbolo}`)
+
+
+    // if (Venta.IdTipoDocumentoSunat !== VALE) {
+    const ImpuestosTitle = [];
+
+    if (Venta.descItems > 0) ImpuestosTitle.push("TOTAL DESC.:  " + `${Venta.Simbolo}`)
+    if (Venta.Gravadas > 0) ImpuestosTitle.push("GRAVADO:  " + `${Venta.Simbolo}`)
+    if (Venta.Exoneradas > 0) ImpuestosTitle.push("EXONERADO:  " + `${Venta.Simbolo}`)
+    if (Venta.Inafectas > 0) ImpuestosTitle.push("INAFECTO:  " + `${Venta.Simbolo}`)
+    if (Venta.Gratuitas > 0) ImpuestosTitle.push("GRATUITO:  " + `${Venta.Simbolo}`)
+    if (Venta.IGV > 0) ImpuestosTitle.push("IGV:  " + `${Venta.Simbolo}`)
+    if (Venta.ICBPER > 0) ImpuestosTitle.push("ICBPER:  " + `${Venta.Simbolo}`)
+    if (Venta.ISC > 0) ImpuestosTitle.push("ISC:  " + `${Venta.Simbolo}`)
+    if (Venta.IVAP > 0) ImpuestosTitle.push("IVAP:  " + `${Venta.Simbolo}`)
+
+    totalesTitle = [...ImpuestosTitle, ...totalesTitle];
+    // }
+
+    // const totalesTitleSectionHeight =
+    //     totalesTittleSection.getHeight(totalesTitle) + 17;
+    // totalesTittleSection.y = pageHeight - totalesTitleSectionHeight;
+    doc.setFont("helvetica", "bold");
+    totalesTittleSection.write(totalesTitle,totalesStyle);
+    doc.setFont("helvetica", "normal");
+    const gravadas = Venta.Gravadas.toFixed(2);
+    const exoneradas = String(decimalAdjust('floor', Venta.Exoneradas, -2));
+    const inafectas = String(decimalAdjust('floor', Venta.Inafectas, -2));
+    const gratuitas = String(decimalAdjust('floor', Venta.Gratuitas, -2));
+    let igv = Venta.IGV.toFixed(2);
+    let icbper = String(decimalAdjust('floor', Venta.ICBPER, -2));
+    let isc = String(decimalAdjust('floor', Venta.ISC, -2));
+    let ivap = String(decimalAdjust('floor', Venta.IVAP, -2));
+    let total = String(Number(decimalAdjust('round', Venta.Total, -2)).toFixed(2));
+    let Redondeo = String(decimalAdjust('floor', Venta.Redondeo, -2));
+    let TotalRedondeo = String(decimalAdjust('floor', Venta.TotalRedondeo, -2));
+    let descItems = String(decimalAdjust('floor', Venta.descItems, -2))
+    const _impNeto = Venta.Total - (Venta.Total * (Venta.retencion / 100))
+    const importeNeto = String(decimalAdjust('floor', _impNeto, -2))
+
+    // const vuelto = calculateVueltoToDisplay(Venta);
+
+    let descuento = String(Venta.DescuentoTotal);
+
+    const totalesMontoSection = new Section(doc, 
+    165, //x
+    // pageHeight - (imgQR.height / 3.779528 + 13),
+    235, //y
+    totalesStyle,
+    40 //largo
+    ); //(doc, 160, 0, totalesStyle, 40)
+
+    let totales = [
+        `${total}`
+    ];
+
+    if (Venta.Redondeo > 0 && showExtraInfo) totales.push(Redondeo)
+    if (Venta.DescuentoTotal > 0) totales.push(descuento)
+    // if (Venta.Vuelto > 0) totales.push(vuelto)
+    if (showExtraInfo) totales.push(TotalRedondeo)
+    if (hasRetencion > 0) totales.push(importeNeto)
+
+    // if (Venta.IdTipoDocumentoSunat !== VALE) {
+    let Impuestos = [];
+
+    if (Venta.descItems > 0) Impuestos.push(descItems)
+    if (Venta.Gravadas > 0) Impuestos.push(gravadas)
+    if (Venta.Exoneradas > 0) Impuestos.push(exoneradas)
+    if (Venta.Inafectas > 0) Impuestos.push(inafectas)
+    if (Venta.Gratuitas > 0) Impuestos.push(gratuitas)
+    if (Venta.IGV > 0) Impuestos.push(igv)
+    if (Venta.ICBPER > 0) Impuestos.push(icbper)
+    if (Venta.ISC > 0) Impuestos.push(isc)
+    if (Venta.IVAP > 0) Impuestos.push(ivap)
+
+
+    totales = [...Impuestos, ...totales];
+    // }
+
+    // const totalesMontoHeight = totalesMontoSection.getHeight(totales) + 17;
+    // totalesMontoSection.y = pageHeight - totalesMontoHeight;
+    // const heightForNonQr = Venta.IdTipoDocumentoSunat === VALE ? 10 : 0
+    doc.setFont("helvetica", "bold");
+    totalesMontoSection.write(totales,totalesStyle);
+    doc.setFont("helvetica", "normal");
 
 
 
