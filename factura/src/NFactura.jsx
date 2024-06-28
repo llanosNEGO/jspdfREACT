@@ -5,6 +5,36 @@ import {decimalAdjust, doDownload, VALE} from "./Global";
 // import { decimalAdjust, calculateVueltoToDisplay } from './../Global';
 // import moment from "moment";
 
+
+// CLASE CONSTRUCTA PARA IMPRIMIR LA LINEA
+class DynamicSection {
+    constructor(doc, x, y, style, limit = 200) {
+        this.doc = doc;
+        this.x = x;
+        this.y = y;
+        this.style = style;
+        this.limit = limit;
+    }
+
+    write(text, style = this.style) {
+        const splitText = this.doc.splitTextToSize(text, this.limit);
+        this.doc.setFontSize(style.fontSize);
+        this.doc.setFont(this.style.fontFamily, style.fontWeight);
+        splitText.forEach(line => {
+            this.doc.text(line, this.x, this.y);
+            this.y += style.lineHeight * style.fontSize / 2;
+        });
+    }
+
+    drawLine(offsetX1 = 0, offsetX2 = 0) {
+        this.doc.line(this.x + offsetX1, this.y, this.x + this.limit - offsetX2, this.y);
+        this.y += this.style.lineHeight * this.style.fontSize / 2;
+    }
+
+    getCurrentY() {
+        return this.y;
+    }
+}
 function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     // Configuración y ajustes previos...
 
@@ -40,11 +70,16 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     EmpresaTittleSection.write(Venta.Empresa.toUpperCase(), EmpresaTittleStyle);
     doc.setFont("helvetica", "normal");
 
-    //linea separacion 1
-    const lineaIniX = 0; 
-    const lineaFinX = 600; 
-    const lineaY = 36;  
-    doc.line(lineaIniX, lineaY, lineaFinX, lineaY);    
+    ///LINEA DE SEPARACION 1
+    const Linea1Style = new Style(8, "bold", 1.5);
+    const Linea1Section = new DynamicSection(
+        doc,
+        10, //x
+        36, // ajusta la posición Y según sea necesario
+        Linea1Style,
+        195 // límite del ancho de la línea
+    );
+    Linea1Section.drawLine(0, 0); // Dibuja la línea    
 
     ////////////////Datos de la empresa 
     const EmpresaDataStyle = new Style(8, "normal", 1.5);
@@ -202,11 +237,16 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
     pagoSection.write(`CATIDAD DE CUOTAS :  3`,clienteStyle );
     pagoSection.drawBox(3);
 
-    //linea separacion 2
-    const lineaIniX2 = 0; 
-    const lineaFinX2 = 600; 
-    const lineaY2 = 68;  
-    doc.line(lineaIniX2, lineaY2, lineaFinX2, lineaY2);   
+    ///LINEA DE SEPARACION 1
+    const Linea2Style = new Style(8, "bold", 1.5);
+    const Linea2Section = new DynamicSection(
+        doc,
+        10, //x
+        68, // ajusta la posición Y según sea necesario
+        Linea2Style,
+        195 // límite del ancho de la línea
+    );
+    Linea2Section.drawLine(0, 0); // Dibuja la línea    
 
     /////////////TABLA
 
@@ -332,13 +372,17 @@ function crearDocPDF(DetallesVenta, Venta, cuentasBancarias = []) {
 
     // doc.text('IMAGEN QR',80,280);
     
+    ///LINEA DE SEPARACION 3
+    const Linea3Style = new Style(8, "bold", 1.5);
+    const Linea3Section = new DynamicSection(
+        doc,
+        10, //x
+        268, // ajusta la posición Y según sea necesario
+        Linea3Style,
+        195 // límite del ancho de la línea
+    );
+    Linea3Section.drawLine(0, 0); // Dibuja la línea  
     
-    // Tercera Linea de separacion 
-
-    const lineainitX3 = 0; 
-    const lineaFinX3 = 600; 
-    const lineaY3 = 268;   
-    doc.line(lineainitX3, lineaY3, lineaFinX3, lineaY3); 
 
     ///OBSERVACIONES
     const ObservacionesStyle = new Style(10, "normal");
