@@ -186,7 +186,7 @@ function crearGuiaPPF(DetallesVenta, Venta, cuentasBancarias = []) {
     const fechaStyle = new Style(10, "bold", 1.5, 'center');
     const fechaSection = new Section(
          doc,
-         170,//x
+         173,//x
          EmpresadataSection.endY + 3,//y
          fechaStyle,
          null,        
@@ -341,7 +341,7 @@ function crearGuiaPPF(DetallesVenta, Venta, cuentasBancarias = []) {
         transpoStyle
     )
     doc.setFont("helvetica", "bold");
-    transpoSection.write("DATOS DE LOS VEHICULOS")
+    transpoSection.write("EMPRESA TRANSPORTISTA")
     doc.setFont("helvetica", "normal");
 
     ////DETALLE EMPRESA TRANSPORTISTA
@@ -390,7 +390,7 @@ function crearGuiaPPF(DetallesVenta, Venta, cuentasBancarias = []) {
     pieSection2.write(Venta.Representacion.toUpperCase(),pieStyle2);
 
     ////OBSERVACIONES
-    const obseStyle = new Style (8,"normal")
+    const obseStyle = new Style (8,"bold")
     const obseSection = new Section (
         doc,
         103,
@@ -400,11 +400,15 @@ function crearGuiaPPF(DetallesVenta, Venta, cuentasBancarias = []) {
         null,
         12
     );
-    obseSection.write(`OBSERVACIONES: ${Venta.Observacion}`);
+    doc.setFont("helvetica", "bold");
+    doc.text("OBSERVACIONES: ",obseSection.x-8,obseSection.y-7,obseStyle); 
+    obseSection.write("OBSERVACIONES: "+Venta.Observacion.toUpperCase());
+    doc.setFont("helvetica", "normal");
     obseSection.drawBox(3);//Borde
 
     ////RECIBI CONFORME
-    const recStyle = new Style(8,"normal");
+    const recStyle = new Style(8,"bold");
+    const recFirmaStyle = new Style(8,"normal",1.5,'center');
     const recSection = new Section (
         doc,
         160,
@@ -415,9 +419,23 @@ function crearGuiaPPF(DetallesVenta, Venta, cuentasBancarias = []) {
         10
     );
     doc.setFont("helvetica", "bold");
-    recSection.write(`RECIBI CONFORME: `)
+    doc.text("RECIBI CONFORME: ",recSection.x-6,recSection.y-5,recStyle);
+    recSection.write("                                                  ");
+    ////LInea de firma
+    const LineaFIrmaStyle = new Style(8, "bold", 1.5);
+    const LineaFirmaSection = new DynamicSection(
+        doc,
+        163, //x
+        285, // ajusta la posición Y según sea necesario
+        LineaFIrmaStyle,
+        38 // límite del ancho de la línea
+    );
+    LineaFirmaSection.drawLine(0, 0); // Dibuja la línea
+    /////
+    doc.text("FIRMA, SELLO Y FECHA", recSection.x+12,recSection.y+5,recFirmaStyle);
     doc.setFont("helvetica", "normal");
     recSection.drawBox(3);//Borde
+
 
     ///LINEA DE SEPARACION
     const Linea3Style = new Style(8, "bold", 1.5);
@@ -426,12 +444,9 @@ function crearGuiaPPF(DetallesVenta, Venta, cuentasBancarias = []) {
         10, //x
         263, // ajusta la posición Y según sea necesario
         Linea3Style,
-        194 // límite del ancho de la línea
+        195 // límite del ancho de la línea
     );
     Linea3Section.drawLine(0, 0); // Dibuja la línea
-
-
-
 
     doc.save('Nueva_Guia_Remision.pdf');
 }
