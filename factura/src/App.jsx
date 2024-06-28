@@ -1,11 +1,12 @@
 
 import React from 'react';
-import PdfCotizacion from './Cotizacion';
-import PdfFactura from './Factura';
-//import PdfGuia from './Guia';
+// import PdfCotizacion from './Cotizacion';
+// import PdfFactura from './Factura';
+import PdfGuia from './Guia';
 import './App.css';
 import  crearDocPDF  from './NFactura.jsx'
 import crearCotPDF from './NCotizacion.jsx'
+import crearGuiaPPF from './NGuiaRemision.jsx'
 
 
 function App() {
@@ -232,7 +233,7 @@ function App() {
     ];
     crearDocPDF(DetallesVenta, Venta , cuentasBancarias);  
   };
-  const handleGeneraPDF = () => {
+  const handleGeneraCOPDF = () => {
     const DetallesVenta =
     [
       {
@@ -574,19 +575,392 @@ function App() {
     ];
     crearCotPDF(DetallesVenta,Venta,cuentasBancarias);
   };
+  const handleGenerarGUIPDF = () => {
+    const DetallesVenta =
+    [
+      {
+          "id":295,
+          "idCotizacion":75,
+          "cantidad":1,
+          "entregado":0,
+          "IdProducto":37,
+          "NombreProducto":"OLLA ALUMINIO ANTIADHERENTE   UNIDAD ",
+          "idPresentacion":38,
+          "IdPresentacion":38,
+          "NombrePresentacion":"PRINCIPAL",
+          "EsFacturable":1,
+          "idStock":1119,
+          "Stock":959,
+          "IdTipoStock":1,
+          "idAfectacionIgv":1,
+          "precioVenta":75,
+          "valorUnitario":63.559322,
+          "Descuento":0,
+          "total":75,
+          "idAlmacen":3,
+          "tipoCambio":1,
+          "IdGrupoClasificacionIgv":1,
+          "initialAfectGrat":1,
+          "NombreProductoConPresentacion":"OLLA ALUMINIO ANTIADHERENTE   UNIDAD","Tributos":"[1]",
+          "TasaIsc":null,
+          "descripcion":"OLLA ALUMINIO ANTIADHERENTE  PRINCIPAL",
+          "unidadMedida":"UNIDAD",
+          "Codigo":"P0000037",
+          "NombreProductoUnidadPrecio":"OLLA ALUMINIO ANTIADHERENTE   UNIDAD  X S/ 75.00","IdAlmacen":3,
+          "precios":
+          [
+              {
+                  "IdPrecioPlantilla":1,
+                  "NombrePrecio":"Costo",
+                  "Precio":68.99999968,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":58.474576,
+                  "IdPrecio":112,
+                  "Porcentaje":null,
+                  "afectacionFree":"0",
+                  "normalPrice":58.474576
+              },
+              {
+                  "IdPrecioPlantilla":2,
+                  "NombrePrecio":"Menor/Lista",
+                  "Precio":74.99999996,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":63.559322,
+                  "IdPrecio":113,
+                  "Porcentaje":0.09,
+                  "afectacionFree":"0",
+                  "normalPrice":63.559322
+              },
+              {
+                  "IdPrecioPlantilla":3,
+                  "NombrePrecio":"Mayor",
+                  "Precio":0,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":0,
+                  "IdPrecio":114,
+                  "Porcentaje":null,
+                  "afectacionFree":"0",
+                  "normalPrice":0
+              }    
+          ],
+          "PrecioVenta":75,
+          "PrecioEspecial":0,
+          "PrecioFamiliar":0,
+          "PrecioCosto":68.99999968,
+          "PrecioMenor":74.99999996,
+          "oldPrecios":[],
+          "precioMayor":0,
+          "Cantidad":1,
+          "Total":75,
+          "Importe":75,
+          "Unidad":"UNIDAD",
+          "Indice":1
+      },
+      {
+          "id":296,
+          "idCotizacion":75,
+          "cantidad":1,
+          "entregado":0,
+          "IdProducto":35,
+          "NombreProducto":"SET X 4 RECIPIENTES DE VIDRIO  UNIDAD ","idPresentacion":36,
+          "IdPresentacion":36,
+          "NombrePresentacion":"PRINCIPAL",
+          "EsFacturable":1,
+          "idStock":1057,
+          "Stock":61,
+          "IdTipoStock":1,
+          "idAfectacionIgv":1,
+          "precioVenta":87.000001,
+          "valorUnitario":73.728814,
+          "Descuento":0,
+          "total":87.000001,
+          "idAlmacen":3,
+          "tipoCambio":1,
+          "IdGrupoClasificacionIgv":1,
+          "initialAfectGrat":1,
+          "NombreProductoConPresentacion":"SET X 4 RECIPIENTES DE VIDRIO UNIDAD",
+          "Tributos":"[1]",
+          "TasaIsc":null,
+          "descripcion":"SET X 4 RECIPIENTES DE VIDRIO PRINCIPAL","unidadMedida":"UNIDAD",
+          "Codigo":"P0000035",
+          "NombreProductoUnidadPrecio":"SET X 4 RECIPIENTES DE VIDRIO  UNIDAD  X S/ 87.00",
+          "IdAlmacen":3,
+          "precios":
+          [
+              {
+                  "IdPrecioPlantilla":1,
+                  "NombrePrecio":"Costo",
+                  "Precio":73.99999952,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":62.711864,
+                  "IdPrecio":106,
+                  "Porcentaje":null,
+                  "afectacionFree":"0",
+                  "normalPrice":62.711864
+              },
+              {
+                  "IdPrecioPlantilla":2,
+                  "NombrePrecio":"Menor/Lista",
+                  "Precio":87.00000052,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":73.728814,
+                  "IdPrecio":107,
+                  "Porcentaje":0.18,
+                  "afectacionFree":"0",
+                  "normalPrice":73.728814
+              },
+              {
+                  "IdPrecioPlantilla":3,
+                  "NombrePrecio":"Mayor",
+                  "Precio":0,"CantidadPrecio":0,
+                  "ValorUnitario":0,
+                  "IdPrecio":108,
+                  "Porcentaje":null,
+                  "afectacionFree":"0",
+                  "normalPrice":0
+              }
+          ],
+          "PrecioVenta":87.000001,
+          "PrecioEspecial":0,
+          "PrecioFamiliar":0,
+          "PrecioCosto":73.99999952,
+          "PrecioMenor":87.00000052,
+          "oldPrecios":[],
+          "precioMayor":0,
+          "Cantidad":1,
+          "Total":87.000001,
+          "Importe":87.000001,
+          "Unidad":"UNIDAD",
+          "Indice":2
+      },
+      {
+          "id":297,
+          "idCotizacion":75,
+          "cantidad":1,
+          "entregado":0,
+          "IdProducto":27,
+          "NombreProducto":"BANDEJA PARA DESAYUNO  UNIDAD ",
+          "idPresentacion":28,"IdPresentacion":28,"NombrePresentacion":"PRINCIPAL",
+          "EsFacturable":1,
+          "idStock":809,
+          "Stock":978,
+          "IdTipoStock":1,
+          "idAfectacionIgv":1,
+          "precioVenta":15,
+          "valorUnitario":12.711864,
+          "Descuento":0,
+          "total":15,
+          "idAlmacen":3,
+          "tipoCambio":1,
+          "IdGrupoClasificacionIgv":1,
+          "initialAfectGrat":1,
+          "NombreProductoConPresentacion":"BANDEJA PARA DESAYUNO  UNIDAD","Tributos":"[1]",
+          "TasaIsc":null,
+          "descripcion":"BANDEJA PARA DESAYUNO PRINCIPAL","unidadMedida":"UNIDAD",
+          "Codigo":"P0000027",
+          "NombreProductoUnidadPrecio":"BANDEJA PARA DESAYUNO  UNIDAD  X S/ 15.00","IdAlmacen":3,
+          "precios":
+          [
+              {
+                  "IdPrecioPlantilla":1,
+                  "NombrePrecio":"Costo",
+                  "Precio":9.99999968,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":8.474576,
+                  "IdPrecio":82,
+                  "Porcentaje":null,
+                  "afectacionFree":"0",
+                  "normalPrice":8.474576
+              },
+              {
+                  "IdPrecioPlantilla":2,
+                  "NombrePrecio":"Menor/Lista",
+                  "Precio":14.99999952,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":12.711864,
+                  "IdPrecio":83,
+                  "Porcentaje":0.5,
+                  "afectacionFree":"0",
+                  "normalPrice":12.711864
+              },
+              {
+                  "IdPrecioPlantilla":3,
+                  "NombrePrecio":"Mayor",
+                  "Precio":0,
+                  "CantidadPrecio":0,
+                  "ValorUnitario":0,
+                  "IdPrecio":84,
+                  "Porcentaje":null,
+                  "afectacionFree":"0",
+                  "normalPrice":0
+              }
+          ],
+          "PrecioVenta":15,
+          "PrecioEspecial":0,
+          "PrecioFamiliar":0,
+          "PrecioCosto":9.99999968,
+          "PrecioMenor":14.99999952,
+          "oldPrecios":[],
+          "precioMayor":0,
+          "Cantidad":1,
+          "Total":15,
+          "Importe":15,
+          "Unidad":"UNIDAD",
+          "Indice":3
+      }
+    ];
+    const Venta = 
+    {
+        "id":75,
+        "fechaEmision":"2024-05-16 23:54:00",
+        "total":177,
+        "descripcion":"",
+        "estado":"APROBADO",
+        "razonSocial":"ESCOBEDO MEDINA AUDITORES ASOCIADOS S.CIVIL DE R.L.",
+        "Abreviatura":"SOL",
+        "Simbolo":"S/",
+        "IdTipoDocumento":6,
+        "NroTipoDocumento":"20546121250",
+        "Direccion":"AV. REPÚBLICA DE PANAMÁ URB. LIMATAMBO 4050",
+        "CorreoElectronico":"",
+        "serie":"TO02",
+        "serieNum":"C-75",
+        "Letras":"CIENTO SETENTA Y SIETE CON 00/100 SOLES",
+        "Sucursal":"LIMA",
+        "DireccionSucursal":"AV. REPÚBLICA DE PANAMÁ URB. LIMATAMBO 4050","Empresa":"COCA-COLA SERVICIOS DE PERU S.A",
+        "Ruc":"20415932376",
+        "Logo":null,
+        "IdModalidadPago":"CONTADO",
+        "PlazoEntrega":"2024-05-17",
+        "CodigoTipoComprobante":"-8",
+        "IdTipoDocumentoSunat":"-8",
+        "NombreEmpleado":"NEGO",
+        "ApellidoEmpleado":"LIMA",
+        "Ubigeo":"150131",
+        "Celular":"",
+        "TipoComprobante":"GUIA REMISION REMITENTE",
+        "TelefonoDos":"854966666",
+        "TelefonoTres":"6558842814",
+        "NombreCaja":"",
+        "FechaEmision":"2024-05-16 23:54:00",
+        "RazonSocial":"ESCOBEDO MEDINA AUDITORES ASOCIADOS S.CIVIL DE R.L.",
+        "Descripcion":"Cotización",
+        "Observacion":"",
+        "Serie":"C",
+        "NumeroComprobante":"00015",
+        "Redondeo":0,
+        "Gravadas":150.00000084745798,
+        "Exoneradas":0,
+        "Inafectas":0,
+        "ICBPER":0,
+        "IGV":27,
+        "Exportacion":0,
+        "Total":177.000001,
+        "Gratuitas":0,
+        "ISC":0,
+        "IVAP":0,
+        "DescuentoTotal":0,
+        "TotalRedondeo":177.000001,
+        "Correo": "Venta@mifacturaperu.com",
+        "Consultadocumento":"PARA CONSULTAR EL DOCUMENTO VISITA WWW.MIFACTURAPERU COM   CERTIFICADO PSE POR SUNAT",
+        "Representacion":"Representacion impresa del comprobante",
+        "nota":"NOTA: ",
+        "nota1":"1. Los precios incluyen IGV",
+        "nota2":"2. Deben ser aprobados todos los términos de la cotización sírvase enviar la orden de compra y correo electrónico de aceptación para proceder con la entrega de la mercadería y/o productos",
+        "nota3":"3. Los productos serán recogidos en nuestro punto de venta Jr. Jose Sabogal N 1200 - Cajamarca",
+        "Motivotraslado" : "VENTA",
+        "FechaInicio" : "13-05-2024 16:58",
+        "Relacionado" : "FE01-0000085",
+        "Modalidad" : "TRANSPORTE PRIVADO",
+        "Peso":"0.50 KILOS",
+        "Bultos" :1,
+        "PuntoPartida" : "AV.REPUBLICA LOTE 57 URB. LOS CAMELIOS  LTZ LOS AMENDRON -5784 SANTA ROSA - LIMA - LIMA",
+        "PuntoLlegada" : "AV.REPUBLICA LOTE 57 URB. LOS CAMELIOS  LTZ LOS AMENDRON -5784 TRUJILLO - TRUJILLO - TRUJILO",
+        "RazonS" : "COMPAÑIA MINERA ANTAMINA S.A",
+        "docDE" : "20330262428",
+        "vehiculo1" : "volvo 523",
+        "vehiculo2" : "trailer",
+        "placa1" : "BFO781",
+        "placa2" : "ATF980",
+        "conductor1" : "TERRONES ALBERTO JULIAN SUARES",
+        "dni1" : "45689524",
+        "licencia1" : "Q-45689524",
+        "conductor2" : "TERRONES ALBERTO JULIAN SUARES",
+        "dni2" : "45689524",
+        "licencia2" : "Q-45689524",
+        "nombreTransportista" : "",
+        "docTransportista" : "",
+        "DireccionCliente": "CAL. ARGENTINA URB. EL RECREO ET. 2 131",
+        "infoCotizaciones":
+        [
+          "Esta cotización es válida hasta agotar stock.",
+          "Los precios pueden cambiar sin previo aviso."
+        ],        
+        "EsCotizacion":true
+    };
+    const cuentasBancarias =
+    [
+        {
+            "IdNumerosCuenta":1,
+            "IdEmpresa":2,
+            "IdMoneda":1,
+            "Banco":"BCP",
+            "NumeroCTA":"256161616514984",
+            "CCI":"00006584964964064",
+            "Moneda":"SOLES"
+        },
+        {
+            "IdNumerosCuenta":2,
+            "IdEmpresa":2,
+            "IdMoneda":2,
+            "Banco":"BCP",
+            "NumeroCTA":"5146146846274514",
+            "CCI":"0000064869849849849849",
+            "Moneda":"DÓLARES AMERICANOS"
+        },
+        {
+            "IdNumerosCuenta":3,
+            "IdEmpresa":2,
+            "IdMoneda":1,
+            "Banco":"BBVA",
+            "NumeroCTA":"468464641646584646",
+            "CCI":"5146146135164114",
+            "Moneda":"SOLES"
+        },
+        {
+            "IdNumerosCuenta":4,
+            "IdEmpresa":2,
+            "IdMoneda":2,
+            "Banco":"BBVA",
+            "NumeroCTA":"156146146541658",
+            "CCI":"000516516516-26561658146",
+            "Moneda":"DÓLARES AMERICANOS"
+        }
+    ];
+    crearGuiaPPF(DetallesVenta,Venta,cuentasBancarias);
+  };
 
   return (
     <div className="App">
       <h1>Pdf Factura</h1>
       <p>
-        <PdfFactura/>
+        {/* <PdfFactura/> */}
       </p>
       <p>
-        <PdfCotizacion />
+        {/* <PdfCotizacion /> */}
+      </p>
+      <p>
+        <PdfGuia/>
       </p>
       <button onClick={handleGenerarPDF}>Generar Nueva Factura PDF</button>
-      <p></p>
-      <button onClick={handleGeneraPDF}>Generar Nueva Cotizacion PDF</button>
+      <p>
+
+      </p>
+      <button onClick={handleGeneraCOPDF}>Generar Nueva Cotizacion PDF</button>
+      <p>
+
+      </p>
+      <button onClick={handleGenerarGUIPDF}>Generar Nueva Guia Remision PDF</button>
     </div>
   );
 }
