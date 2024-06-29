@@ -336,7 +336,7 @@ const PdfGuia = () => {
     }
     return (
         <div>
-             <button onClick={generarPDF}>Generar Guia PDF</button>
+             <button onClick={generarPDF}>Generar Guia Remision PDF</button>
         </div>
  
      );

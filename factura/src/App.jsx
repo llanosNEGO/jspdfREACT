@@ -1,7 +1,7 @@
 
 import React from 'react';
-// import PdfCotizacion from './Cotizacion';
-// import PdfFactura from './Factura';
+ import PdfCotizacion from './Cotizacion';
+ import PdfFactura from './Factura';
 import PdfGuia from './Guia';
 import './App.css';
 import  crearDocPDF  from './NFactura.jsx'
@@ -942,12 +942,12 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Pdf Factura</h1>
+      <h1>GENERADOR COMPROBANTE PDF</h1>
       <p>
-        {/* <PdfFactura/> */}
+       <PdfFactura/>
       </p>
       <p>
-        {/* <PdfCotizacion /> */}
+       <PdfCotizacion />
       </p>
       <p>
         <PdfGuia/>
