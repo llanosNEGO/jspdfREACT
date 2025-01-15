@@ -1,12 +1,13 @@
 
 import React from 'react';
- import PdfCotizacion from './Cotizacion';
- import PdfFactura from './Factura';
+import PdfCotizacion from './Cotizacion';
+import PdfFactura from './Factura';
 import PdfGuia from './Guia';
 import './App.css';
 import  crearDocPDF  from './NFactura.jsx'
 import crearCotPDF from './NCotizacion.jsx'
 import crearGuiaPPF from './NGuiaRemision.jsx'
+import {registroMovCajaPDF} from './ticket.jsx';
 
 
 function App() {
@@ -939,6 +940,30 @@ function App() {
     ];
     crearGuiaPPF(DetallesVenta,Venta,cuentasBancarias);
   };
+  const handleGeneratePDF = async () => {
+    const mockInfoPDF = [
+      [
+        [
+          {
+            NombreCaja: 'PASE A UNA DE NUESTRAS CAJAS CON ESTE TICKET',
+            Ruc: '10719086956',
+            NombreCliente: 'Abed Nego Llovera Llanos',
+            codigo: 'PV - 362',
+            Empresa: 'Coca Cola S.A.C',
+          },
+        ],
+      ],
+    ];
+    const mockData = {
+      infoPDF: mockInfoPDF,
+    };
+
+    try {
+      await registroMovCajaPDF(mockData, false);
+    } catch (error) {
+      console.error('Error al generar el PaaaaDF:', error);
+    }
+  };
 
   return (
     <div className="App">
@@ -961,6 +986,11 @@ function App() {
 
       </p>
       <button onClick={handleGenerarGUIPDF}>Generar Nueva Guia Remision PDF</button>
+      <p>
+
+      </p>
+      <button onClick={handleGeneratePDF}>Generar ticket PDF</button>
+
     </div>
   );
 }
